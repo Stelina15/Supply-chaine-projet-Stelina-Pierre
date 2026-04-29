@@ -1,0 +1,31 @@
+[project]
+name = "reseau-routier"
+version = "0.1.0"
+description = "Projet de calcul de flot maximal dans un réseau routier"
+authors = []
+requires-python = ">=3.13"
+dependencies = [
+    "marimo>=0.23.2",
+    "matplotlib>=3.10.8",
+    "networkx",
+    "pydantic",
+    "typer",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.15.11",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["src/tests"]
+pythonpath = ["src"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/reseau_routier"]
