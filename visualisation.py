@@ -1,8 +1,7 @@
 import marimo
 
+__generated_with = "0.23.2"
 app = marimo.App(width="medium")
-
-
 
 
 @app.cell
@@ -20,19 +19,16 @@ def _():
     from reseau_routier.modeles import construit_graphe_capacites_villes
 
     return (
-        mo,
-        plt,
-        nx,
-        reseau_exemple,
-        capacites_villes_exemple,
-        construit_graphe,
         calcule_flot_maximal,
         calcule_flot_maximal_capacites_villes,
+        capacites_villes_exemple,
+        construit_graphe,
         construit_graphe_capacites_villes,
+        mo,
+        nx,
+        plt,
+        reseau_exemple,
     )
-
-
-
 
 
 @app.cell
@@ -81,11 +77,12 @@ def _(graphe_q1, nx, plt):
     plt.close(fig_q1)
     return (fig_q1,)
 
+
 @app.cell
 def _(
+    capacites_villes_exemple,
     construit_graphe_capacites_villes,
     reseau_exemple,
-    capacites_villes_exemple,
 ):
     graphe_q3 = construit_graphe_capacites_villes(
         reseau_exemple,
@@ -97,8 +94,8 @@ def _(
 @app.cell
 def _(
     calcule_flot_maximal_capacites_villes,
-    reseau_exemple,
     capacites_villes_exemple,
+    reseau_exemple,
 ):
     flot_q3 = calcule_flot_maximal_capacites_villes(
         reseau_exemple,
@@ -160,8 +157,8 @@ def _(graphe_q3, nx, plt):
 @app.cell
 def _(
     calcule_flot_maximal_capacites_villes,
-    reseau_exemple,
     capacites_villes_exemple,
+    reseau_exemple,
 ):
     resultats_q4 = {}
 
@@ -175,7 +172,6 @@ def _(
         )
 
         resultats_q4[_capacite] = _flot
-
     return (resultats_q4,)
 
 
@@ -192,10 +188,10 @@ def _(mo):
 
 @app.cell
 def _(
-    capacite_d,
     calcule_flot_maximal_capacites_villes,
-    reseau_exemple,
+    capacite_d,
     capacites_villes_exemple,
+    reseau_exemple,
 ):
     capacites_modifiees_q4 = dict(capacites_villes_exemple)
     capacites_modifiees_q4["d"] = capacite_d.value
@@ -204,7 +200,6 @@ def _(
         reseau_exemple,
         capacites_modifiees_q4,
     )
-
     return (flot_interactif_q4,)
 
 
@@ -216,15 +211,15 @@ def _(resultats_q4):
     )
 
     tableau_q4 = f"""
-| Capacité de d | Flot maximal |
-|---:|---:|
-{lignes_tableau_q4}
-"""
+    | Capacité de d | Flot maximal |
+    |---:|---:|
+    {lignes_tableau_q4}
+    """
     return (tableau_q4,)
 
 
 @app.cell
-def _(resultats_q4, plt):
+def _(plt, resultats_q4):
     capacites = list(resultats_q4.keys())
     flots = list(resultats_q4.values())
 
@@ -235,90 +230,89 @@ def _(resultats_q4, plt):
     ax_q4.set_ylabel("Flot maximal")
     ax_q4.set_title("Influence de la capacité de d sur le flot maximal")
     ax_q4.grid()
-
     return (fig_q4,)
 
 
 @app.cell
 def _(
-    mo,
-    flot_q1,
-    flot_q3,
+    capacite_d,
     fig_q1,
     fig_q3,
     fig_q4,
-    capacite_d,
     flot_interactif_q4,
+    flot_q1,
+    flot_q3,
+    mo,
     tableau_q4,
 ):
     dashboard = mo.ui.tabs(
         {
             "Accueil": mo.md(
                 """
-# Exploration du réseau routier
+    # Exploration du réseau routier
 
-Ce dashboard présente les résultats principaux du projet.
+    Ce dashboard présente les résultats principaux du projet.
 
-L'objectif est d'étudier un problème de flot maximal dans un réseau routier.
+    L'objectif est d'étudier un problème de flot maximal dans un réseau routier.
 
-## Organisation
+    ## Organisation
 
-- Question 1 : Quel est le débit horaire maximal de véhicules reliant E à S ? 
-- Question 3 : Quel est le nouveau débit horaire maximal de véhicules reliant E à S après ajout des capacités sur les villes ?
-- Question 4 : Analyse de la variation du flux total en fonction de la variation du flux maximal traversant d ?
-
-
-## Démarche pour réaliser ce projet 
-
-Ce projet consiste à étudier un problème de circulation dans un réseau routier à l'aide des outils de théorie des graphes.
-
-Le réseau est modélisé sous forme de graphe orienté, où les sommets représentent des villes et les arêtes représentent des routes.  
-Chaque route possède une capacité, qui correspond au nombre maximal de véhicules pouvant y circuler.
-
-Dans un premier temps, on construit ce réseau en Python et on le représente sous forme de graphe à l'aide de la bibliothèque `networkx`.  
-On utilise ensuite un algorithme de flot maximal pour déterminer la quantité maximale de flux pouvant être envoyée d'une source `E` vers un puits `S`, en respectant les capacités des routes.
-
-Dans un second temps, on rend le modèle plus réaliste en introduisant des contraintes sur les villes.  
-En effet, une ville ne peut pas laisser passer un flux illimité.  
-Pour modéliser cela, chaque ville est transformée en deux sommets (`entrée` et `sortie`), reliés par une arête dont la capacité correspond à la capacité maximale de la ville.  
-Cette transformation permet d'intégrer les contraintes sur les sommets dans un modèle de flot.
-
-Enfin, on réalise une analyse du fonctionnement du réseau en faisant varier certains paramètres.  
-En particulier, on étudie l'influence de la capacité d'une ville sur le flot maximal, afin d'identifier les éléments qui limitent la circulation.
-
-L'objectif de ce travail est de comprendre comment les contraintes locales (routes ou villes) influencent la capacité globale du réseau, et d'identifier les points critiques qui limitent le flux.
+    - Question 1 : Quel est le débit horaire maximal de véhicules reliant E à S ? 
+    - Question 3 : Quel est le nouveau débit horaire maximal de véhicules reliant E à S après ajout des capacités sur les villes ?
+    - Question 4 : Analyse de la variation du flux total en fonction de la variation du flux maximal traversant d ?
 
 
-"""
+    ## Démarche pour réaliser ce projet 
+
+    Ce projet consiste à étudier un problème de circulation dans un réseau routier à l'aide des outils de théorie des graphes.
+
+    Le réseau est modélisé sous forme de graphe orienté, où les sommets représentent des villes et les arêtes représentent des routes.  
+    Chaque route possède une capacité, qui correspond au nombre maximal de véhicules pouvant y circuler.
+
+    Dans un premier temps, on construit ce réseau en Python et on le représente sous forme de graphe à l'aide de la bibliothèque `networkx`.  
+    On utilise ensuite un algorithme de flot maximal pour déterminer la quantité maximale de flux pouvant être envoyée d'une source `E` vers un puits `S`, en respectant les capacités des routes.
+
+    Dans un second temps, on rend le modèle plus réaliste en introduisant des contraintes sur les villes.  
+    En effet, une ville ne peut pas laisser passer un flux illimité.  
+    Pour modéliser cela, chaque ville est transformée en deux sommets (`entrée` et `sortie`), reliés par une arête dont la capacité correspond à la capacité maximale de la ville.  
+    Cette transformation permet d'intégrer les contraintes sur les sommets dans un modèle de flot.
+
+    Enfin, on réalise une analyse du fonctionnement du réseau en faisant varier certains paramètres.  
+    En particulier, on étudie l'influence de la capacité d'une ville sur le flot maximal, afin d'identifier les éléments qui limitent la circulation.
+
+    L'objectif de ce travail est de comprendre comment les contraintes locales (routes ou villes) influencent la capacité globale du réseau, et d'identifier les points critiques qui limitent le flux.
+
+
+    """
             ),
             "Question 1": mo.vstack(
                 [
                     mo.md(
                         f"""
-# Question 1
+    # Question 1
 
-Quel est le débit horaire maximal de véhicules reliant E à S ?
+    Quel est le débit horaire maximal de véhicules reliant E à S ?
 
-Ici on cherche donc à comprendre la capacité globale du réseau routier.
-On cherche à savoir quelle quantité maximale de flux peut partir de la source E et arriver
-au puits S, en respectant les capacités imposés sur les routes.
-On va donc essayer de trouver le flot maximal.  
+    Ici on cherche donc à comprendre la capacité globale du réseau routier.
+    On cherche à savoir quelle quantité maximale de flux peut partir de la source E et arriver
+    au puits S, en respectant les capacités imposés sur les routes.
+    On va donc essayer de trouver le flot maximal.  
 
-Résultat :
-Le flot maximal vaut est de **{flot_q1}**
+    Résultat :
+    Le flot maximal vaut est de **{flot_q1}**
 
-## Graphe initial :
-"""
+    ## Graphe initial :
+    """
                     ),
                     fig_q1,
                     mo.md(
                         """
-## Interprétation
-Le flot maximal obtenu est de 18.
-Cela signifie que le réseau peut transporter au maximum 18 unités de flux de la source E vers le puits S, en respectant les capacités des routes.
-Ce résultat montre que le réseau est limité par certaines routes critiques qui atteignent leur capacité maximale. Ces routes constituent des goulots d'étranglement, car elles empêchent d’augmenter davantage le flux global.
-Ainsi, le flot maximal dépend de la structure globale du réseau et de la répartition des capacités, et non uniquement des routes ayant les plus grandes capacités.
-"""
+    ## Interprétation
+    Le flot maximal obtenu est de 18.
+    Cela signifie que le réseau peut transporter au maximum 18 unités de flux de la source E vers le puits S, en respectant les capacités des routes.
+    Ce résultat montre que le réseau est limité par certaines routes critiques qui atteignent leur capacité maximale. Ces routes constituent des goulots d'étranglement, car elles empêchent d’augmenter davantage le flux global.
+    Ainsi, le flot maximal dépend de la structure globale du réseau et de la répartition des capacités, et non uniquement des routes ayant les plus grandes capacités.
+    """
                     ),
                 ]
             ),
@@ -326,57 +320,57 @@ Ainsi, le flot maximal dépend de la structure globale du réseau et de la répa
                 [
                     mo.md(
                         f"""
-# Question 3
+    # Question 3
 
-## Modélisation avec capacités sur les villes
+    ## Modélisation avec capacités sur les villes
 
-On ajoute maintenant des capacités sur les villes intermédiaires.
-En réalité, une ville ne peut pas laisser passer un flux illimité : elle a une capacité maximale.  
-Il faut donc intégrer cette contrainte dans le modèle.
-Pour cela, chaque ville intermédiaire est transformée en deux sommets :
-- `ville_entree`
-- `ville_sortie`
+    On ajoute maintenant des capacités sur les villes intermédiaires.
+    En réalité, une ville ne peut pas laisser passer un flux illimité : elle a une capacité maximale.  
+    Il faut donc intégrer cette contrainte dans le modèle.
+    Pour cela, chaque ville intermédiaire est transformée en deux sommets :
+    - `ville_entree`
+    - `ville_sortie`
 
-Ces deux sommets sont reliés par une arête dont la capacité correspond à la capacité maximale de la ville.
-Toutes les routes arrivant dans la ville sont connectées à `ville_entree`, et toutes celles qui en partent sont reliées à `ville_sortie`.
-Cette transformation permet de prendre en compte les contraintes sur les villes tout en utilisant les algorithmes classiques de flot maximal, qui fonctionnent uniquement sur les arêtes.
+    Ces deux sommets sont reliés par une arête dont la capacité correspond à la capacité maximale de la ville.
+    Toutes les routes arrivant dans la ville sont connectées à `ville_entree`, et toutes celles qui en partent sont reliées à `ville_sortie`.
+    Cette transformation permet de prendre en compte les contraintes sur les villes tout en utilisant les algorithmes classiques de flot maximal, qui fonctionnent uniquement sur les arêtes.
 
 
-Résultat : Le flot maximal avec capacités sur les villes est de **{flot_q3}**
+    Résultat : Le flot maximal avec capacités sur les villes est de **{flot_q3}**
 
-## Graphe transformé
-"""
+    ## Graphe transformé
+    """
                     ),
                     fig_q3,
                     mo.md(
                         """
-## Interprétation
+    ## Interprétation
 
-Le flot maximal obtenu avec les capacités sur les villes est de 16.
-On observe une diminution du flot maximal par rapport à la question 1 (où il était de 18).  
-Cela s'explique par l'ajout de contraintes supplémentaires : certaines villes limitent désormais le flux pouvant les traverser.
-Ces villes jouent un rôle de goulot d'étranglement, car même si les routes ont encore de la capacité disponible, le flux total est bloqué par la capacité maximale des villes.
+    Le flot maximal obtenu avec les capacités sur les villes est de 16.
+    On observe une diminution du flot maximal par rapport à la question 1 (où il était de 18).  
+    Cela s'explique par l'ajout de contraintes supplémentaires : certaines villes limitent désormais le flux pouvant les traverser.
+    Ces villes jouent un rôle de goulot d'étranglement, car même si les routes ont encore de la capacité disponible, le flux total est bloqué par la capacité maximale des villes.
 
-On constate donc que la capacité globale du réseau ne dépend pas uniquement des routes, mais aussi des capacités des villes intermédiaires.
-Cela montre que l'introduction de contraintes plus réalistes réduit la performance du réseau et permet de mieux identifier les points critiques qui limitent la circulation.
+    On constate donc que la capacité globale du réseau ne dépend pas uniquement des routes, mais aussi des capacités des villes intermédiaires.
+    Cela montre que l'introduction de contraintes plus réalistes réduit la performance du réseau et permet de mieux identifier les points critiques qui limitent la circulation.
 
-"""
+    """
                     ),
                 ]
             ),
             "Question 4": mo.vstack(
     [
         mo.md("""
-# Question 4
+    # Question 4
 
-Dans cette question, on cherche à comprendre l'influence de la capacité d'une ville sur le flot maximal du réseau.
-On fait varier la capacité de la ville `d`, tout en gardant les autres paramètres constants.
-Pour chaque valeur de capacité, on recalcule le flot maximal afin d'observer comment le réseau réagit à cette modification.
-L'objectif est d'identifier si cette ville constitue un point limitant du réseau et de voir à partir de quel moment augmenter sa capacité n'a plus d'effet.
+    Dans cette question, on cherche à comprendre l'influence de la capacité d'une ville sur le flot maximal du réseau.
+    On fait varier la capacité de la ville `d`, tout en gardant les autres paramètres constants.
+    Pour chaque valeur de capacité, on recalcule le flot maximal afin d'observer comment le réseau réagit à cette modification.
+    L'objectif est d'identifier si cette ville constitue un point limitant du réseau et de voir à partir de quel moment augmenter sa capacité n'a plus d'effet.
 
 
-Le curseur permet de modifier la capacité de `d`.
-"""),
+    Le curseur permet de modifier la capacité de `d`.
+    """),
         capacite_d,
         mo.md(
             f"Pour une capacité de **d = {capacite_d.value}**, le flot maximal vaut : **{flot_interactif_q4}**"
@@ -390,19 +384,19 @@ Le curseur permet de modifier la capacité de `d`.
         ]),
 
         mo.md("""
-## Interprétation
+    ## Interprétation
 
 
-On observe que le flot maximal augmente progressivement lorsque la capacité de la ville `d` augmente, passant de 12 à 16.
-Cela montre que, pour les petites capacités, la ville `d` constitue un goulot d'étranglement : elle limite directement le flux dans le réseau.
+    On observe que le flot maximal augmente progressivement lorsque la capacité de la ville `d` augmente, passant de 12 à 16.
+    Cela montre que, pour les petites capacités, la ville `d` constitue un goulot d'étranglement : elle limite directement le flux dans le réseau.
 
-Cependant, à partir d'une certaine valeur (ici 5), le flot maximal se stabilise à 16.  
-Cela signifie qu'augmenter davantage la capacité de la ville `d` n'a plus d'impact.
-On en déduit que d'autres contraintes dans le réseau deviennent alors limitantes (routes ou autres villes).
-Ainsi, la ville `d` influence le flot maximal uniquement jusqu'à un certain seuil, après quoi elle n'est plus le facteur limitant du réseau.
-"""),
+    Cependant, à partir d'une certaine valeur (ici 5), le flot maximal se stabilise à 16.  
+    Cela signifie qu'augmenter davantage la capacité de la ville `d` n'a plus d'impact.
+    On en déduit que d'autres contraintes dans le réseau deviennent alors limitantes (routes ou autres villes).
+    Ainsi, la ville `d` influence le flot maximal uniquement jusqu'à un certain seuil, après quoi elle n'est plus le facteur limitant du réseau.
+    """),
     ]
-),
+    ),
         }
     )
 
@@ -412,4 +406,3 @@ Ainsi, la ville `d` influence le flot maximal uniquement jusqu'à un certain seu
 
 if __name__ == "__main__":
     app.run()
-    
