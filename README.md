@@ -64,6 +64,7 @@ SUPPLY-CHAIN-PROJET-MAIN/
 │   ├── reseau_routier/  
 │   │   ├── __init__.py  
 │   │   ├── data.py  
+    │   ├── cli.py 
 │   │   ├── exemple.py  
 │   │   ├── flot.py  
 │   │   ├── modeles.py  
@@ -71,7 +72,7 @@ SUPPLY-CHAIN-PROJET-MAIN/
 │   │  
 │   └── tests/  
 │       ├── test_data.py  
-│       ├── test_examples.py  
+│       ├── test_exemples.py  
 │       ├── test_flot.py  
 │       └── test_modeles.py  
 │  
@@ -92,7 +93,10 @@ SUPPLY-CHAIN-PROJET-MAIN/
 - matplotlib  
 - marimo  
 - pytest  
-- uv  
+- uv 
+- typer
+- ruff
+ 
 
 ---
 
@@ -121,8 +125,19 @@ uv run python main.py
 Ce script permet d’exécuter les calculs et d’afficher les résultats dans le terminal.
 
 ---
+### Lancer l'interface en ligne de commande
 
-### Lancer le dashboard interactif
+Afficher les résultats principaux:
+
+uv run python -m reseau_routier.cli tout
+
+Afficher les questions 1 et 3 :
+uv run python -m reseau_routier.cli exemple
+
+Analyser la ville d :
+uv run python -m reseau_routier.cli analyse-d
+---
+#### Lancer le dashboard interactif
 
 uv run marimo run visualisation.py
 
@@ -153,8 +168,11 @@ Les tests vérifient :
 - la validité des résultats
 
 ---
-
-## 📌 Organisation du code
+## Qualité du code 
+Pour vérifier la qualité du code avec ruff :
+uv run ruff check .
+---
+### 📌 Organisation du code
 
 data.py  
 → définit les structures du réseau (routes, villes)
