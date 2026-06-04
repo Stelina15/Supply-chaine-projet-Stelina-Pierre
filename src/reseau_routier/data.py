@@ -68,7 +68,9 @@ class Reseau(BaseModel):
 
             cle = (route.depart, route.arrivee)
             if cle in routes_vues:
-                msg = "Deux routes ne peuvent pas avoir le même départ et la même arrivée"
+                msg = (
+                    "Deux routes ne peuvent pas avoir le même départ et la même arrivée"
+                )
                 raise ValueError(msg)
             routes_vues.add(cle)
 

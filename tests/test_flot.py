@@ -12,8 +12,8 @@ from reseau_routier.flot import (
     calcule_flot_maximal,
     calcule_flot_maximal_capacites_villes,
     analyse_impact_capacite_ville,
+    trouve_capacite_minimale_utile,
 )
-
 
 
 def test_construit_graphe_simple():
@@ -36,9 +36,6 @@ def test_construit_graphe_simple():
     assert nx.utils.graphs_equal(graphe, attendu)
 
 
-
-
-
 def test_flot_maximal_simple():
     reseau = Reseau(
         villes=["E", "a", "S"],
@@ -53,7 +50,6 @@ def test_flot_maximal_simple():
     flot = calcule_flot_maximal(reseau)
 
     assert flot == 3
-
 
 
 def test_flot_maximal_plus_complexe():
@@ -72,9 +68,6 @@ def test_flot_maximal_plus_complexe():
     flot = calcule_flot_maximal(reseau)
 
     assert flot == 9
-    
-
-
 
 
 def test_flot_maximal_capacites_villes():
@@ -96,10 +89,6 @@ def test_flot_maximal_capacites_villes():
     )
 
     assert flot == 2
-
-
-
-
 
 
 def test_analyse_impact_capacite_ville():
@@ -129,12 +118,6 @@ def test_analyse_impact_capacite_ville():
     }
 
 
-
-
-
-
-
-
 def test_analyse_impact_capacite_ville_invalide():
     reseau = Reseau(
         villes=["E", "a", "S"],
@@ -155,11 +138,6 @@ def test_analyse_impact_capacite_ville_invalide():
             ville="b",
             capacites_testees=[1, 2, 3],
         )
-
-
-
-
-
 
 
 def test_analyse_impact_capacite_testee_invalide():
@@ -184,9 +162,6 @@ def test_analyse_impact_capacite_testee_invalide():
         )
 
 
-
-
-
 def test_flot_maximal_capacite_ville_non_limitante():
     reseau = Reseau(
         villes=["E", "a", "S"],
@@ -204,3 +179,25 @@ def test_flot_maximal_capacite_ville_non_limitante():
     )
 
     assert flot == 3
+
+
+def test_trouve_capacite_minimale_utile():
+    reseau = Reseau(
+        villes=["E", "a", "S"],
+        routes=[
+            Route(depart="E", arrivee="a", capacite=5),
+            Route(depart="a", arrivee="S", capacite=5),
+        ],
+        source="E",
+        puits="S",
+    )
+
+    capacite, flot = trouve_capacite_minimale_utile(
+        reseau=reseau,
+        capacites_villes={"a": 10},
+        ville="a",
+        capacite_max=10,
+    )
+
+    assert capacite == 5
+    assert flot == 5

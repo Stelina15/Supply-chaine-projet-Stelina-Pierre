@@ -56,30 +56,28 @@ Cette transformation permet d’utiliser les algorithmes classiques de flot maxi
 
 SUPPLY-CHAIN-PROJET-MAIN/
 
-│  
-├── src/  
-│   ├── notebooks/  
-│   │   └── exploration.ipynb  
-│   │  
-│   ├── reseau_routier/  
-│   │   ├── __init__.py  
-│   │   ├── data.py  
-    │   ├── cli.py 
-│   │   ├── exemple.py  
-│   │   ├── flot.py  
-│   │   ├── modeles.py  
-│   │   └── visugraphe.py  
-│   │  
-│   └── tests/  
-│       ├── test_data.py  
-│       ├── test_exemples.py  
-│       ├── test_flot.py  
-│       └── test_modeles.py  
-│  
-├── main.py  
-├── visualisation.py  
-├── pyproject.toml  
-├── uv.lock  
+├── src/
+│   ├── notebooks/
+│   │   └── exploration.ipynb
+│   │
+│   └── reseau_routier/
+│       ├── __init__.py
+│       ├── cli.py
+│       ├── data.py
+│       ├── exemple.py
+│       ├── flot.py
+│       ├── modeles.py
+│       └── visugraphe.py
+│
+├── tests/
+│   ├── test_data.py
+│   ├── test_exemples.py
+│   ├── test_flot.py
+│   └── test_modeles.py
+│
+├── visualisation.py
+├── pyproject.toml
+├── uv.lock
 ├── .gitignore
 └── README.md  
 
@@ -120,13 +118,6 @@ uv init
 
 ### Lancer le programme principal
 
-uv run python main.py
-
-Ce script permet d’exécuter les calculs et d’afficher les résultats dans le terminal.
-
----
-### Lancer l'interface en ligne de commande
-
 Afficher les résultats principaux:
 
 uv run python -m reseau_routier.cli tout
@@ -136,6 +127,7 @@ uv run python -m reseau_routier.cli exemple
 
 Analyser la ville d :
 uv run python -m reseau_routier.cli analyse-d
+uv run python -m reseau_routier.cli meilleure-capacite
 ---
 #### Lancer le dashboard interactif
 
@@ -171,7 +163,17 @@ Les tests vérifient :
 ## Qualité du code 
 Pour vérifier la qualité du code avec ruff :
 uv run ruff check .
+
+Pour formater automatiquement le code :
+uv run ruff format
+
 ---
+
+##  Type checking
+Pour vérifier les types avec mypy :
+uv run mypy src/reseau_routier
+---
+
 ### 📌 Organisation du code
 
 data.py  
@@ -191,9 +193,6 @@ visugraphe.py
 
 visualisation.py  
 → dashboard interactif marimo
-
-main.py  
-→ exécution simple du projet
 
 ---
 

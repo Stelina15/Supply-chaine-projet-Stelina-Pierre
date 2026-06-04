@@ -4,11 +4,10 @@ Module de calcul de flot maximal dans un réseau routier.
 """
 
 import networkx as nx
+from typing import cast
 
 from reseau_routier.data import Reseau
 from reseau_routier.modeles import construit_graphe_capacites_villes
-
-
 
 
 def construit_graphe(reseau: Reseau) -> nx.DiGraph:
@@ -26,24 +25,14 @@ def construit_graphe(reseau: Reseau) -> nx.DiGraph:
     return graphe
 
 
-
-
 def calcule_flot_maximal(reseau: Reseau) -> int:
     """Calcule le flot maximal entre la source et le puits."""
 
     graphe = construit_graphe(reseau)
 
-    flot, _ = nx.maximum_flow(
-        graphe,
-        reseau.source,
-        reseau.puits,
-        capacity="capacity"
-    )
+    flot, _ = nx.maximum_flow(graphe, reseau.source, reseau.puits, capacity="capacity")
 
-    return flot
-
-
-
+    return cast(int, flot)
 
 
 def calcule_flot_maximal_capacites_villes(
@@ -57,18 +46,9 @@ def calcule_flot_maximal_capacites_villes(
         capacites_villes=capacites_villes,
     )
 
-    flot, _ = nx.maximum_flow(
-        graphe,
-        reseau.source,
-        reseau.puits,
-        capacity="capacity"
-    )
+    flot, _ = nx.maximum_flow(graphe, reseau.source, reseau.puits, capacity="capacity")
 
-    return flot
-
-
-
-
+    return cast(int, flot)
 
 
 def analyse_impact_capacite_ville(
@@ -99,3 +79,32 @@ def analyse_impact_capacite_ville(
         )
 
     return resultat
+
+
+def trouve_capacite_minimale_utile(
+    reseau: Reseau,
+    capacites_villes: dict[str, int],
+    ville: str,
+    capacite_max: int = 20,
+) -> tuple[int, int]:
+    """Trouve la plus petite capacité utile pour une ville.
+
+    La capacité minimale utile est la plus petite capacité permettant
+    d'atteindre le meilleur flot maximal observé.
+    Au-delà de cette capacité, augmenter la ville n'améliore plus le flot.
+    """
+
+    resultats = analyse_impact_capacite_ville(
+        reseau=reseau,
+        capacites_villes=capacites_villes,
+        ville=ville,
+        capacites_testees=list(range(1, capacite_max + 1)),
+    )
+
+    flot_max_observe = max(resultats.values())
+
+    for capacite, flot in resultats.items():
+        if flot == flot_max_observe:
+            return capacite, flot
+
+    raise RuntimeError("Aucune capacité utile trouvée")

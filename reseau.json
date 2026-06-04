@@ -1,0 +1,40 @@
+{
+  "villes": ["E", "a", "b", "c", "d", "e", "f", "g", "S"],
+  "source": "E",
+  "puits": "S",
+
+  "routes": [
+    {"depart": "E", "arrivee": "a", "capacite": 5},
+    {"depart": "E", "arrivee": "b", "capacite": 10},
+    {"depart": "E", "arrivee": "e", "capacite": 8},
+
+    {"depart": "a", "arrivee": "c", "capacite": 7},
+    {"depart": "a", "arrivee": "d", "capacite": 10},
+
+    {"depart": "b", "arrivee": "c", "capacite": 8},
+    {"depart": "b", "arrivee": "d", "capacite": 2},
+    {"depart": "b", "arrivee": "e", "capacite": 1},
+
+    {"depart": "c", "arrivee": "g", "capacite": 7},
+
+    {"depart": "d", "arrivee": "g", "capacite": 4},
+    {"depart": "d", "arrivee": "S", "capacite": 6},
+    {"depart": "d", "arrivee": "f", "capacite": 2},
+
+    {"depart": "e", "arrivee": "f", "capacite": 4},
+
+    {"depart": "f", "arrivee": "S", "capacite": 6},
+
+    {"depart": "g", "arrivee": "S", "capacite": 10}
+  ],
+
+  "capacites_villes": {
+    "a": 6,
+    "b": 7,
+    "c": 8,
+    "d": 6,
+    "e": 6,
+    "f": 5,
+    "g": 9
+  }
+}

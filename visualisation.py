@@ -9,18 +9,24 @@ def _():
     import marimo as mo
     import matplotlib.pyplot as plt
     import networkx as nx
+    
+    from reseau_routier.json_loader import charge_reseau_json
 
-    from reseau_routier.exemple import reseau_exemple, capacites_villes_exemple
+    reseau_exemple, capacites_villes_exemple = (
+    charge_reseau_json("reseau.json")
+)
     from reseau_routier.flot import (
         construit_graphe,
         calcule_flot_maximal,
         calcule_flot_maximal_capacites_villes,
+        trouve_capacite_minimale_utile,
     )
     from reseau_routier.modeles import construit_graphe_capacites_villes
 
     return (
         calcule_flot_maximal,
         calcule_flot_maximal_capacites_villes,
+        trouve_capacite_minimale_utile,
         capacites_villes_exemple,
         construit_graphe,
         construit_graphe_capacites_villes,
@@ -108,28 +114,20 @@ def _(
 def _(graphe_q3, nx, plt):
     _positions_q3 = {
         "E": (0, 0),
-
         "a_entree": (1, 1.2),
         "a_sortie": (1.4, 1.2),
-
         "b_entree": (1, 0),
         "b_sortie": (1.4, 0),
-
         "e_entree": (1, -1.2),
         "e_sortie": (1.4, -1.2),
-
         "c_entree": (2.4, 1.4),
         "c_sortie": (2.8, 1.4),
-
         "d_entree": (2.4, 0),
         "d_sortie": (2.8, 0),
-
         "f_entree": (3.2, -1.2),
         "f_sortie": (3.6, -1.2),
-
         "g_entree": (3.7, 1.0),
         "g_sortie": (4.1, 1.0),
-
         "S": (4.8, 0),
     }
 
@@ -176,6 +174,31 @@ def _(
 
 
 @app.cell
+def _(
+    capacites_villes_exemple,
+    reseau_exemple,
+    trouve_capacite_minimale_utile,
+):
+    capacite_utile_q4, flot_optimal_q4 = trouve_capacite_minimale_utile(
+        reseau=reseau_exemple,
+        capacites_villes=capacites_villes_exemple,
+        ville="d",
+        capacite_max=10,
+    )
+
+    return capacite_utile_q4, flot_optimal_q4
+
+@app.cell
+def _(mo, capacites_villes_exemple):
+    ville_etudiee = mo.ui.dropdown(
+        options=list(capacites_villes_exemple.keys()),
+        value="d",
+        label="Ville étudiée",
+    )
+
+    return (ville_etudiee,)
+
+@app.cell
 def _(mo):
     capacite_d = mo.ui.slider(
         start=1,
@@ -192,9 +215,12 @@ def _(
     capacite_d,
     capacites_villes_exemple,
     reseau_exemple,
+    ville_etudiee,
 ):
     capacites_modifiees_q4 = dict(capacites_villes_exemple)
-    capacites_modifiees_q4["d"] = capacite_d.value
+    capacites_modifiees_q4[
+    ville_etudiee.value
+] = capacite_d.value
 
     flot_interactif_q4 = calcule_flot_maximal_capacites_villes(
         reseau_exemple,
@@ -206,8 +232,7 @@ def _(
 @app.cell
 def _(resultats_q4):
     lignes_tableau_q4 = "\n".join(
-        f"| {_capacite} | {_flot} |"
-        for _capacite, _flot in resultats_q4.items()
+        f"| {_capacite} | {_flot} |" for _capacite, _flot in resultats_q4.items()
     )
 
     tableau_q4 = f"""
@@ -236,6 +261,7 @@ def _(plt, resultats_q4):
 @app.cell
 def _(
     capacite_d,
+    ville_etudiee,
     fig_q1,
     fig_q3,
     fig_q4,
@@ -244,6 +270,8 @@ def _(
     flot_q3,
     mo,
     tableau_q4,
+    capacite_utile_q4,
+    flot_optimal_q4,
 ):
     dashboard = mo.ui.tabs(
         {
@@ -359,8 +387,8 @@ def _(
                 ]
             ),
             "Question 4": mo.vstack(
-    [
-        mo.md("""
+                [
+                    mo.md("""
     # Question 4
 
     Dans cette question, on cherche à comprendre l'influence de la capacité d'une ville sur le flot maximal du réseau.
@@ -371,20 +399,29 @@ def _(
 
     Le curseur permet de modifier la capacité de `d`.
     """),
-        capacite_d,
-        mo.md(
-            f"Pour une capacité de **d = {capacite_d.value}**, le flot maximal vaut : **{flot_interactif_q4}**"
-        ),
+                    ville_etudiee,
+                    capacite_d,
+                    mo.md(
+                      f"""
+Pour une capacité de **{ville_etudiee.value} = {capacite_d.value}**,
+le flot maximal vaut : **{flot_interactif_q4}**
+"""  
+                    ),
+                    mo.md("## Analyse des résultats"),
+                    mo.hstack([fig_q4, mo.md(tableau_q4)]),
+                    mo.md(
+                        f"""
+    ## Meilleure capacité de la ville {ville_etudiee.value}
 
-        mo.md("## Analyse des résultats"),
+    La capacité minimale utile de la ville `{ville_etudiee.value}` est **{capacite_utile_q4}**.
 
-        mo.hstack([
-            fig_q4,
-            mo.md(tableau_q4)
-        ]),
+    À partir de cette valeur, le flot maximal atteint **{flot_optimal_q4}** et n'augmente plus.
 
-        mo.md("""
-    ## Interprétation
+    Cela signifie qu'augmenter davantage la capacité de `{ville_etudiee.value}` n'améliore plus la performance globale du réseau.
+    """
+                    ),
+                    mo.md("""
+    ## Interprétation (analyse de l'impact de la capacité de la ville d)
 
 
     On observe que le flot maximal augmente progressivement lorsque la capacité de la ville `d` augmente, passant de 12 à 16.
@@ -395,8 +432,8 @@ def _(
     On en déduit que d'autres contraintes dans le réseau deviennent alors limitantes (routes ou autres villes).
     Ainsi, la ville `d` influence le flot maximal uniquement jusqu'à un certain seuil, après quoi elle n'est plus le facteur limitant du réseau.
     """),
-    ]
-    ),
+                ]
+            ),
         }
     )
 
