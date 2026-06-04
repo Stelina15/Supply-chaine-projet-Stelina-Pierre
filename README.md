@@ -58,6 +58,7 @@ Il devient ainsi possible de modifier la structure du réseau, les routes ou les
 ---
 
 ## 📂 Structure du projet
+```text
 
 SUPPLY-CHAIN-PROJET-MAIN/
 
@@ -87,7 +88,7 @@ SUPPLY-CHAIN-PROJET-MAIN/
 ├── uv.lock
 ├── .gitignore
 └── README.md  
-
+```
 
 ---
 
