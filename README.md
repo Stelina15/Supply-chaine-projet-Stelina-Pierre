@@ -41,6 +41,11 @@ Ces deux sommets sont reliés par une arête correspondant à la capacité maxim
 
 Cette transformation permet d’utiliser les algorithmes classiques de flot maximal, qui fonctionnent uniquement sur les arêtes.
 
+Les données du réseau sont désormais stockées dans un fichier reseau.json.
+
+Cette approche permet de séparer les données du code source. Le programme charge automatiquement le réseau depuis ce fichier grâce au module json_loader.py.
+
+Il devient ainsi possible de modifier la structure du réseau, les routes ou les capacités sans changer le code Python.
 ---
 
 ## 📊 Résultats principaux
@@ -66,6 +71,7 @@ SUPPLY-CHAIN-PROJET-MAIN/
 │       ├── data.py
 │       ├── exemple.py
 │       ├── flot.py
+│       ├── json_loader.py
 │       ├── modeles.py
 │       └── visugraphe.py
 │
@@ -75,6 +81,7 @@ SUPPLY-CHAIN-PROJET-MAIN/
 │   ├── test_flot.py
 │   └── test_modeles.py
 │
+├── reseau.json
 ├── visualisation.py
 ├── pyproject.toml
 ├── uv.lock
@@ -94,6 +101,7 @@ SUPPLY-CHAIN-PROJET-MAIN/
 - uv 
 - typer
 - ruff
+- mypy
  
 
 ---
@@ -126,8 +134,8 @@ Afficher les questions 1 et 3 :
 uv run python -m reseau_routier.cli exemple
 
 Analyser la ville d :
-uv run python -m reseau_routier.cli analyse-d
-uv run python -m reseau_routier.cli meilleure-capacite
+uv run python -m reseau_routier.cli analyse-ville d
+uv run python -m reseau_routier.cli meilleure-capacite --ville d
 ---
 #### Lancer le dashboard interactif
 
@@ -140,9 +148,10 @@ Ouvrir ce lien dans le navigateur.
 Le dashboard permet de :
 
 - visualiser les graphes
-- voir les résultats
-- utiliser un slider interactif
-- analyser l’évolution du flot
+- voir les résultats des différentes questions
+- modifier interactivement la capacité d’une ville
+- sélectionner la ville étudiée
+- analyser l’évolution du flot maximal
 
 ---
 
@@ -182,6 +191,9 @@ data.py
 exemple.py  
 → contient les données du sujet
 
+json_loader.py
+→ charge les données du réseau depuis un fichier JSON
+
 flot.py  
 → calcule le flot maximal
 
@@ -203,3 +215,5 @@ Le projet montre que le flot maximal dépend à la fois des routes et des villes
 Certaines villes peuvent devenir des **goulots d’étranglement** et limiter le flux global.
 
 L’analyse permet d’identifier les points critiques du réseau et de mieux comprendre son fonctionnement.
+
+Les données du réseau étant désormais chargées depuis un fichier JSON, le projet peut être adapté à d’autres réseaux routiers sans modifier le code source.
