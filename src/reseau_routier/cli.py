@@ -30,37 +30,28 @@ def affiche_resultats_exemple() -> None:
     print(f"Question 3 - flot maximal avec capacités sur les villes : {flot_villes}")
 
 
-def affiche_analyse_d(max_d: int) -> None:
-    """Affiche l'analyse de la capacité de la ville d."""
+@app.command()
+def analyse_ville(
+    ville: str,
+    capacite_max: int = 10,
+) -> None:
+    """Analyse l'impact de la capacité d'une ville."""
 
-    capacites_testees = list(range(1, max_d + 1))
+    capacites_testees = list(range(1, capacite_max + 1))
+
     resultats = analyse_impact_capacite_ville(
         reseau=reseau_exemple,
         capacites_villes=capacites_villes_exemple,
-        ville="d",
+        ville=ville,
         capacites_testees=capacites_testees,
     )
 
-    print("=== Analyse de la ville d ===")
-    print("Capacité de d | Flot maximal")
-    print("----------------------------")
+    print(f"=== Analyse de la ville {ville} ===")
+    print("Capacité | Flot maximal")
+    print("-----------------------")
+
     for capacite, flot in resultats.items():
-        print(f"{capacite:<13} | {flot}")
-
-
-def affiche_meilleure_capacite(max_d: int) -> None:
-    """Affiche la capacité minimale utile de la ville d."""
-
-    capacite, flot = trouve_capacite_minimale_utile(
-        reseau=reseau_exemple,
-        capacites_villes=capacites_villes_exemple,
-        ville="d",
-        capacite_max=max_d,
-    )
-
-    print("=== Meilleure capacité pour la ville d ===")
-    print(f"Capacité minimale utile : {capacite}")
-    print(f"Flot maximal atteint : {flot}")
+        print(f"{capacite:<8} | {flot}")
 
 
 @app.command()
@@ -70,11 +61,6 @@ def exemple() -> None:
     affiche_resultats_exemple()
 
 
-@app.command()
-def analyse_d(max_d: int = 10) -> None:
-    """Analyse l'impact de la capacité de la ville d."""
-
-    affiche_analyse_d(max_d=max_d)
 
 
 @app.command()
@@ -104,10 +90,13 @@ def tout(max_d: int = 10) -> None:
     affiche_resultats_exemple()
     print()
 
-    affiche_analyse_d(max_d=max_d)
+    analyse_ville(
+    ville="d",
+    capacite_max=max_d,
+)
     print()
 
-    affiche_meilleure_capacite(max_d=max_d)
+    meilleure_capacite(ville="d", capacite_max=max_d)
 
 
 if __name__ == "__main__":
