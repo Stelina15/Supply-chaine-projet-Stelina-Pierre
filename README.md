@@ -137,6 +137,7 @@ uv run python -m reseau_routier.cli exemple
 
 Analyser la ville d :
 uv run python -m reseau_routier.cli analyse-ville d
+
 uv run python -m reseau_routier.cli meilleure-capacite --ville d
 
 ---
