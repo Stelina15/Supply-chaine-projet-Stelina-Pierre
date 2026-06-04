@@ -157,12 +157,16 @@ def _(
     calcule_flot_maximal_capacites_villes,
     capacites_villes_exemple,
     reseau_exemple,
+    ville_etudiee,
 ):
     resultats_q4 = {}
 
     for _capacite in range(1, 11):
         _nouvelles_capacites = dict(capacites_villes_exemple)
-        _nouvelles_capacites["d"] = _capacite
+
+        _nouvelles_capacites[
+            ville_etudiee.value
+        ] = _capacite
 
         _flot = calcule_flot_maximal_capacites_villes(
             reseau_exemple,
@@ -170,19 +174,20 @@ def _(
         )
 
         resultats_q4[_capacite] = _flot
-    return (resultats_q4,)
 
+    return (resultats_q4,)
 
 @app.cell
 def _(
     capacites_villes_exemple,
     reseau_exemple,
     trouve_capacite_minimale_utile,
+    ville_etudiee,
 ):
     capacite_utile_q4, flot_optimal_q4 = trouve_capacite_minimale_utile(
         reseau=reseau_exemple,
         capacites_villes=capacites_villes_exemple,
-        ville="d",
+        ville=ville_etudiee.value,
         capacite_max=10,
     )
 
@@ -204,7 +209,7 @@ def _(mo):
         start=1,
         stop=10,
         value=6,
-        label="Capacité de la ville d",
+        label="Capacité de la ville étudiée",
     )
     return (capacite_d,)
 
@@ -230,13 +235,13 @@ def _(
 
 
 @app.cell
-def _(resultats_q4):
+def _(resultats_q4, ville_etudiee):
     lignes_tableau_q4 = "\n".join(
         f"| {_capacite} | {_flot} |" for _capacite, _flot in resultats_q4.items()
     )
 
     tableau_q4 = f"""
-    | Capacité de d | Flot maximal |
+    | Capacité de {ville_etudiee.value} | Flot maximal |
     |---:|---:|
     {lignes_tableau_q4}
     """
@@ -244,16 +249,16 @@ def _(resultats_q4):
 
 
 @app.cell
-def _(plt, resultats_q4):
+def _(plt, resultats_q4, ville_etudiee):
     capacites = list(resultats_q4.keys())
     flots = list(resultats_q4.values())
 
     fig_q4, ax_q4 = plt.subplots(figsize=(7, 4))
 
     ax_q4.plot(capacites, flots, marker="o")
-    ax_q4.set_xlabel("Capacité de la ville d")
+    ax_q4.set_xlabel(f"Capacité de la ville {ville_etudiee.value}")
     ax_q4.set_ylabel("Flot maximal")
-    ax_q4.set_title("Influence de la capacité de d sur le flot maximal")
+    ax_q4.set_title( f"Influence de la capacité de {ville_etudiee.value} sur le flot maximal")
     ax_q4.grid()
     return (fig_q4,)
 
@@ -391,13 +396,9 @@ def _(
                     mo.md("""
     # Question 4
 
-    Dans cette question, on cherche à comprendre l'influence de la capacité d'une ville sur le flot maximal du réseau.
-    On fait varier la capacité de la ville `d`, tout en gardant les autres paramètres constants.
+    On fait varier la capacité d'une ville du réseau tout en gardant les autres paramètres constants.
     Pour chaque valeur de capacité, on recalcule le flot maximal afin d'observer comment le réseau réagit à cette modification.
-    L'objectif est d'identifier si cette ville constitue un point limitant du réseau et de voir à partir de quel moment augmenter sa capacité n'a plus d'effet.
-
-
-    Le curseur permet de modifier la capacité de `d`.
+    Le menu déroulant permet de choisir la ville étudiée et le curseur permet de modifier sa capacité.
     """),
                     ville_etudiee,
                     capacite_d,
