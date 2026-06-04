@@ -46,6 +46,7 @@ Les données du réseau sont désormais stockées dans un fichier reseau.json.
 Cette approche permet de séparer les données du code source. Le programme charge automatiquement le réseau depuis ce fichier grâce au module json_loader.py.
 
 Il devient ainsi possible de modifier la structure du réseau, les routes ou les capacités sans changer le code Python.
+
 ---
 
 ## 📊 Résultats principaux
@@ -136,7 +137,10 @@ uv run python -m reseau_routier.cli exemple
 
 Analyser la ville d :
 uv run python -m reseau_routier.cli analyse-ville d
+
+Afficher la meilleure capacité d'une ville (ici la ville d) : 
 uv run python -m reseau_routier.cli meilleure-capacite --ville d
+
 ---
 #### Lancer le dashboard interactif
 
@@ -182,6 +186,7 @@ uv run ruff format
 ##  Type checking
 Pour vérifier les types avec mypy :
 uv run mypy src/reseau_routier
+
 ---
 
 ### 📌 Organisation du code
